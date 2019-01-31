@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Create Form";
+}
+@section scripts
+    {
+   <!-- <environment names="Development">
+        <script src="~/view-resources/Views/Attachment/Create.js" asp-append-version="true"></script>
+    </environment>
+        !-->
+    
+}
+<h3>Create Attachment</h3>
+
+<form id="AttachmentCreationForm" method="post"  enctype="multipart/form-data">
+
+
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" name="Title" class="form-control" aria-describedby="Title" placeholder="Enter Title" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <input type="text" name="Description" class="form-control" placeholder="" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="Add File">Add File</label>
+        <input type="file" name="F" class="file-path validate" placeholder="" required/>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+
+</form>
+
+

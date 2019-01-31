@@ -1,0 +1,21 @@
+﻿@model DF.ACE.Web.Models.Common.Attachment.AttachmentGetModel
+@{
+    ViewData["Title"] = "Get";
+}
+
+<h2 class="text-muted">Attachment Data</h2>
+<a asp-action="Index"><button type="button" class="btn btn-primary"> Add More</button></a>
+
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                <img src=@Model.Tasks.ImagePath />
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            <p><h4 class="text-muted">Attribute Values</h4>Value 1 : @Model.Tasks.Title</p><br />
+            <p>Value 2 : @Model.Tasks.Description</p><br />
+        </div>

@@ -1,0 +1,138 @@
+﻿@using DF.ACE.Web.Models.Common.Modals
+@*@model DF.ACE.Web.Models.Users.EditUserModalViewModel*@
+@model DF.ACE.Web.Models.Profile.EditEntireUserModel
+@{
+    Layout = null;
+}
+<div class="modal-body">
+    <div class="m-portlet m-portlet--tabs">
+        @Html.Partial("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditUser")))
+
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-tools">
+                <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right" role="tablist">
+                    <li class="nav-item m-tabs__item">
+                        <a class="nav-link m-tabs__link active" href="#edit-user-details" data-toggle="tab" role="tab">
+                            @L("UserDetails")
+                        </a>
+                    </li>
+                    <li class="nav-item m-tabs__item">
+                        <a class="nav-link m-tabs__link" href="#edit-user-roles" data-toggle="tab" role="tab">
+                            @L("UserRoles")
+                        </a>
+                    </li>
+                    <li class="nav-item m-tabs__item">
+                        <a class="nav-link m-tabs__link" href="#edit-additional-user-details" data-toggle="tab" role="tab">
+                            @L("AdditionalInformation")
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <form name="UserEditForm" role="form" novalidate class="form-validation m-form m-form--fit m-form--label-align-right">
+            <input type="hidden" name="Id" value="@Model.EditUserModalViewModel.User.Id" />
+
+            <div class="m-portlet__body">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane animated fadeIn active" id="edit-user-details">
+
+                        <div class="form-group m-form__group">
+                            <label for="UserName">@L("UserName")</label>
+                            <input type="text" class="form-control m-input validate form-control" name="UserName" id="username" value="@Model.EditUserModalViewModel.User.UserName" disabled required maxlength="32" minlength="2">
+                        </div>
+
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6">
+                                <label>@L("Name")</label>
+                                <input type="text" name="Name" id="name" class="form-control m-input validate form-control" value="@Model.EditUserModalViewModel.User.Name" required maxlength="32">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>@L("Surname")</label>
+                                <input type="text" name="Surname" id="surname" class="form-control m-input validate form-control" value="@Model.EditUserModalViewModel.User.Surname" required maxlength="32">
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group">
+                            <label>@L("EmailAddress")</label>
+                            <input type="email" id="email" class="form-control m-input validate form-control" name="EmailAddress" value="@Model.EditUserModalViewModel.User.EmailAddress" maxlength="256">
+                        </div>
+
+                        <div class="form-group m-form__group">
+                            <label class="m-checkbox m-checkbox--solid m-checkbox--success">
+                                <input type="checkbox" name="IsActive" value="true" id="IsActive" class="filled-in form-control" @(Model.EditUserModalViewModel.User.IsActive ? "checked" : "")>
+                                @L("IsActive")
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane animated fadeIn" id="edit-user-roles">
+                        <div class="row">
+                            <div class="form-group m-form__group row ">
+                                @foreach (var role in Model.EditUserModalViewModel.Roles)
+                                {
+
+                                    <div class="col-lg-6">
+                                        <label for="@string.Format("role{0}",role.Id)" title="@role.DisplayName" class="m-checkbox m-checkbox--solid m-checkbox--success">
+                                            <input type="checkbox" class="filled-in" name="role" value="@role.NormalizedName" title="@role.Description" id="@string.Format("role{0}",role.Id)" @(Model.EditUserModalViewModel.UserIsInRole(role) ? "checked" : "")>
+                                            @role.Name
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane animated fadeIn" id="edit-additional-user-details">
+
+                        <div class="form-group m-form__group row">
+                            <label for="Line1" class="col-2 col-form-label">Line 1</label>
+                            <div class="col-7">
+                                <input name="Line1" id="line1" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.Line1"   placeholder="Enter Line1">
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <label for="Line2" class="col-2 col-form-label">Line 2</label>
+
+                            <div class="col-7">
+                                <input name="Line2" id="line2" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.Line2" placeholder="Enter Line2" >
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <label for="City" class="col-2 col-form-label">City</label>
+                            <div class="col-7">
+                                <input name="City" id="city" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.City"  placeholder="Enter City">
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="State" class="col-2 col-form-label">State</label>
+                            <div class="col-7">
+                                <input name="State" id="state" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.State"   placeholder="Enter State">
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Country</label>
+                            <div class="col-7">
+                                <input  name="Country" id="country" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.Country"   placeholder="Enter Country">
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Postcode</label>
+                            <div class="col-7">
+                                <input  name="ZipCode" id="zipcode" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.ZipCode"  placeholder="Enter Postcode">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.Partial("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+        </form>
+    </div>
+</div>
+
+<script src="~/view-resources/Views/Users/_EditUserModal.js" asp-append-version="true"></script>

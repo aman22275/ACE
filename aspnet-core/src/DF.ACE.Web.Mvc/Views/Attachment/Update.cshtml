@@ -1,0 +1,34 @@
+﻿@model DF.ACE.Web.Models.Common.Attachment.AttachmentUpdateModel
+@{
+    ViewData["Title"] = "Update";
+}
+
+<form id="AttachmentCreationForm" method="post" enctype="multipart/form-data">
+
+
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" value="@Model.Tasks.Title" name="Title" class="form-control" placeholder="" aria-describedby="Title" placeholder="Enter Title" />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <input type="text" value="@Model.Tasks.Description" name="Description" class="form-control" placeholder="" />
+    </div>
+    <div class="form-group">
+        <label for="Add File">Image</label>
+       <img src= @Model.Tasks.ImagePath />
+
+    </div>
+    <div class="form-group">
+        <label for="Add File">Add File</label>
+        <input type="file" name="F" class="file-path validate" placeholder="" />
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+
+</form>
+
+

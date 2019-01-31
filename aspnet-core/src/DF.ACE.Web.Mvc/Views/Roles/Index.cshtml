@@ -1,0 +1,172 @@
+﻿@using DF.ACE.Web.Startup
+@using DF.ACE.Web.Models.Common.Modals
+@model DF.ACE.Web.Models.Roles.RoleListViewModel
+@{
+    ViewBag.CurrentPageName = PageNames.Roles; // The menu item will be active for this page.
+}
+@section scripts
+    {
+    <environment names="Development">
+        <script src="~/view-resources/Views/Roles/Index.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/Roles/Index.min.js" asp-append-version="true"></script>
+    </environment>
+}
+
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    @L("Roles")
+                </h3>
+            </div>
+        </div>
+        <div class="m-portlet__head-tools">
+            <ul class="m-portlet__nav">
+                <li class="m-portlet__nav-item">
+                    <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover" aria-expanded="true">
+                        <a href="javascript:void(0);" class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
+                            <i class="la la-ellipsis-h m--font-brand"></i>
+                        </a>
+                        <div class="m-dropdown__wrapper">
+                            <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                            <div class="m-dropdown__inner">
+                                <div class="m-dropdown__body">
+                                    <div class="m-dropdown__content">
+                                        <ul class="m-nav">
+                                            <li class="m-nav__section m-nav__section--first">
+                                                <span class="m-nav__section-text">Actions</span>
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a id="RefreshButton" href="javascript:void(0);" class="m-nav__link">
+                                                    <i class="m-nav__link-icon flaticon-refresh"></i>
+                                                    <span class="m-nav__link-text">@L("Refresh")</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="m-portlet__body">
+        <!--begin: Datatable -->
+        <div class="m_datatable m-datatable m-datatable--default m-datatable--loaded m-datatable--scroll" id="local_record_selection">
+            <table class="m-datatable__table" style=" display: block; min-height: 300px; max-height: 550px;">
+                <thead class="m-datatable__head">
+                    <tr class="m-datatable__row" style="left: 0px;">
+                        <th data-field="@L("RoleName")" class="m-datatable__cell " style="width: 150px;">
+                            <span>@L("RoleName")</span>
+                        </th>
+                        <th data-field="@L("DisplayName")" class="m-datatable__cell" style="width: 150px;">
+                            <span>@L("DisplayName")</span>
+                        </th>
+                        <th data-field="Actions" class="m-datatable__cell " style="width: 150px;">
+                            <span>Actions</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="m-datatable__body ps ps--active-x ps--active-y" style="max-height: 499px;">
+                    @{ var i = 0; }
+                    @foreach (var role in Model.Roles)
+                    {
+                        i++;
+                        var m = i % 2;
+                        <tr class="m-datatable__row @(m.Equals(0) ? "m-datatable__row--even" : " ") ;" style="left: 0px;">
+                            <td data-field="@L("RoleName")" class="m-datatable__cell" style="width: 150px;">
+                                <span>@role.Name</span>
+                            </td>
+                            <td data-field="@L("DisplayName")" class="m-datatable__cell" style="width: 150px;">
+                                <span>@role.DisplayName</span>
+                            </td>
+                            <td data-field="Actions" class="m-datatable__cell" style="width: 150px;">
+                                <span>
+                                    <a href="#" class="m-btn--pill edit-role m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only" title="Edit" data-role-id="@role.Id" data-toggle="modal" data-target="#RoleEditModal">
+                                        <i class="la la-edit"></i>
+                                    </a>
+                                    <a href="#" class="m-btn--pill delete-role m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only" title="Delete" data-role-id="@role.Id" data-role-name="@role.Name">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+            <div class=" order-1 order-xl-2 m--align-right">
+                <button class="btn btn-info m-btn m-btn--custom m-btn--air" data-toggle="modal" data-target="#RoleCreateModal">
+                    <span style="vertical-align: middle">
+                        <i class="la la-plus"></i>
+                        <span>Add</span>
+                    </span>
+                </button>
+                <div class="m-separator m-separator--dashed d-xl-none"></div>
+            </div>
+        </div>
+        <!--end: Datatable -->
+    </div>
+</div>
+
+
+<div class="modal fade" id="RoleCreateModal" tabindex="-1" role="dialog" aria-labelledby="RoleCreateModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--tab">
+                    @Html.Partial("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("AddRole")))
+
+                    <!--begin::Form-->
+                    <form name="roleCreateForm" role="form" novalidate class="form-validation m-form m-form--fit m-form--label-align-right">
+                        <div class="m-portlet__body">
+                            <div class="form-group m-form__group">
+                                <label for="rolename">@L("RoleName")</label>
+                                <input type="text" class="form-control m-input validate form-control" name="Name" id="name" aria-describedby="Role Name" placeholder="Enter Role Name" requiredd maxlength="32" minlength="2">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label for="displayname">@L("DisplayName")</label>
+                                <input type="text" class="form-control m-input validate form-control" name="DisplayName" id="displayname" aria-describedby="Role Display Name" placeholder="Enter Display Name" requiredd maxlength="32" minlength="2">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label for="role-description">@L("RoleDescription")</label>
+                                <textarea id="role-description" class="form-control m-input validate form-control" name="Description" placeholder="Enter Description"></textarea>
+                            </div>
+                            <div class="form-group m-form__group row">
+                                <h4>@L("Permissions")</h4>
+                            </div>
+
+                            <div class="form-group m-form__group row">
+                                @foreach (var permission in Model.Permissions)
+                                {
+                                    <div class="col-lg-6">
+                                        <label title="@permission.Name" class="m-checkbox m-checkbox--solid m-checkbox--success">
+                                            <input type="checkbox" name="permission" value="@permission.Name" title="@permission.Name" id="permission-@permission.Name" class="filled-in" >
+                                            @permission.DisplayName
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        @Html.Partial("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+                    </form>
+                    <!--end::Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="RoleEditModal" tabindex="-1" role="dialog" aria-labelledby="RoleEditModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@model DF.ACE.Web.Models.Common.Attachment.AttachmentViewModel
+@{
+    ViewData["Title"] = "All Attachment";
+}
+@section scripts
+    {
+    <environment names="Development">
+        <script src="~/view-resources/Views/Attachment/Index.js" asp-append-version="true"></script>
+    </environment>
+
+}
+<h2>Attachment Data</h2>
+    <a asp-action="Create"><button type="button" class="btn btn-primary">+Add</button></a>
+<div id="assetsTable">
+    <table class="table table-condensed" id="catalogIndexTable">
+        <thead>
+            <tr>
+                <th>ImageId</th>
+                <th>Image</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tasks in Model.Tasks)
+            {
+                <tr class="assetRow">
+                    <td>
+                        <h4>@tasks.Id</h4>
+                    </td>
+                    <td class="">                       
+                      
+                            <a href="/Attachment/Get/@tasks.Id"><img height="150px" class="img-responsive" src=@tasks.ImagePath /></a>
+                    </td>
+                    <td>
+                        <a href="/Attachment/Update/@tasks.Id" class="m-btn--pill edit-user m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only" title="Edit" data-user-id="@tasks.Id" data-user-name="@tasks.Title" >
+                            <i class="la la-edit"></i>
+                        </a>
+                        <a href="#" class="m-btn--pill delete-user m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only" title="Delete" data-user-id="@tasks.Id" data-user-name="@tasks.Title">
+                            <i class="la la-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

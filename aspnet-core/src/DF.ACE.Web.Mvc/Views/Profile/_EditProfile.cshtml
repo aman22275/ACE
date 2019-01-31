@@ -1,0 +1,202 @@
+﻿
+@*@model DF.ACE.Web.Models.Profile.EditProfileModel*@
+@model DF.ACE.Web.Models.Profile.EditEntireProfileModel
+
+
+<script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+<script src="~/view-resources/Views/Profile/_EditProfile.js" asp-append-version="true"></script>
+<div>
+    <div class="m-grid__item m-grid__item--fluid m-wrapper">
+        <!-- BEGIN: Subheader -->
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title ">My Profile</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="row">
+                <div class="col-xl-3 col-lg-4">
+                    <div class="m-portlet m-portlet--full-height  ">
+                        <div class="m-portlet__body">
+                            <div class="m-card-profile">
+                                <div class="m-card-profile__title m--hide">
+                                    Your Profile
+                                </div>
+                                <div class="m-card-profile__pic">
+                                    <div class="m-card-profile__pic-wrapper">
+                                   
+                                      
+                                            <img src="@Model.ProfilePictureModel.ProfileAttachment.ImagePath" alt="" />
+                                       
+
+
+                                    </div>
+
+
+                                </div>
+                                <div class="m-card-profile__details">
+                                    <span class="m-card-profile__name">@Model.EditProfileModel.User.Name @Model.EditProfileModel.User.Surname</span>
+                                    <a href="" class="m-card-profile__email m-link">@Model.EditProfileModel.User.EmailAddress</a>
+                                </div>
+                                <br/>
+                                <div class="m-card-profile__details">
+                                    
+                                    <form method="post" asp-action="Create" enctype="multipart/form-data">
+                                        <input type="file" name="f" />
+                                        <input type="hidden" name="ProfileId" value="@Model.ProfilePictureModel.ProfileAttachment.ProfileId"/>
+                                        
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="m-portlet__body-separator"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="m-portlet m-portlet--full-height m-portlet--tabs  ">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-tools">
+                                <ul class="nav nav-tabs m-tabs m-tabs-line   m-tabs-line--left m-tabs-line--primary" role="tablist">
+                                    <li class="nav-item m-tabs__item">
+                                        <a class="nav-link m-tabs__link active">
+                                            <i class="flaticon-share m--hide"></i>
+                                            Update Profile
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="m-portlet__head-tools">
+                                <ul class="m-portlet__nav">
+                                    <li class="m-portlet__nav-item m-portlet__nav-item--last">
+                                        <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover" aria-expanded="true">
+                                            <a href="#" class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
+                                                <i class="la la-gear"></i>
+                                            </a>
+                                            <div class="m-dropdown__wrapper">
+                                                <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                                <div class="m-dropdown__inner">
+                                                    <div class="m-dropdown__body">
+                                                        <div class="m-dropdown__content">
+                                                            <ul class="m-nav">
+                                                                <li class="m-nav__section m-nav__section--first">
+                                                                    <span class="m-nav__section-text">Quick Actions</span>
+                                                                </li>
+                                                                <li class="m-nav__separator m-nav__separator--fit m--hide">
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="m_user_profile_tab_1">
+                                <form name="EditProfileForm" novalidate role="form" class="m-form m-form--fit m-form--label-align-right form-validation">
+                                    <input type="hidden" name="Id" value="@Model.EditProfileModel.User.Id" />
+                                    <input type="hidden" name="UserName" id="username" value="@Model.EditProfileModel.User.UserName" />
+
+                                    <div class="m-portlet__body">
+                                        <div class="form-group m-form__group row">
+                                            <div class="col-10 ml-auto">
+                                                <h3 class="m-form__section">1. Personal Details</h3>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="firstname" class="col-2 col-form-label">First Name</label>
+                                            <div class="col-7">
+                                                <input class="form-control m-input validate" name="Name" id="name" type="text" value="@Model.EditProfileModel.User.Name" required maxlength="32">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group m-form__group row">
+                                            <label for="lastname" class="col-2 col-form-label">Last Name</label>
+                                            <div class="col-7">
+                                                <input class="form-control m-input validate" name="Surname" id="surname" type="text" value="@Model.EditProfileModel.User.Surname" required maxlength="32">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group m-form__group row">
+                                            <label for="email" class="col-2 col-form-label">Email</label>
+                                            <div class="col-7">
+                                                <input class="form-control m-input validate" name="EmailAddress" id="email" type="email" value="@Model.EditProfileModel.User.EmailAddress" maxlength="256">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="m-form__seperator m-form__seperator--dashed m-form__seperator--space-2x"></div>
+                                        <div class="form-group m-form__group row">
+                                            <div class="col-10 ml-auto">
+                                                <h3 class="m-form__section">2. Address</h3>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="Line1" class="col-2 col-form-label">Line 1</label>
+                                            <div class="col-7">
+                                                <input name="Line1" id="line1" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.Line1">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group m-form__group row">
+                                            <label for="Line2" class="col-2 col-form-label">Line 2</label>
+                                            <div class="col-7">
+                                                <input name="Line2" id="line2" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.Line2">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group m-form__group row">
+                                            <label for="City" class="col-2 col-form-label">City</label>
+                                            <div class="col-7">
+                                                <input name="City" id="city" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.City">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="State" class="col-2 col-form-label">State</label>
+                                            <div class="col-7">
+                                                <input name="State" id="state" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.State">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">Country</label>
+                                            <div class="col-7">
+                                                <input name="Country" id="country" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.Country">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">Postcode</label>
+                                            <div class="col-7">
+                                                <input  name="ZipCode" id="zipcode" class="form-control m-input" type="text" value="@Model.EditAdditionalUserProfileModel.AdditionalUserProfile.ZipCode">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-portlet__foot m-portlet__foot--fit">
+                                        <div class="m-form__actions">
+                                            <div class="row">
+                                                <div class="col-2">
+                                                </div>
+                                                <div class="col-7">
+                                                    <button type="submit" name="save" class="btn btn-accent m-btn m-btn--air m-btn--custom">Save changes</button>&nbsp;&nbsp;
+                                                    <button type="reset" name="cancel" class="btn btn-secondary m-btn m-btn--air m-btn--custom">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,285 @@
+﻿@using Abp.Authorization.Users
+@using DF.ACE.Web.Startup
+@using DF.ACE.Web.Models.Common.Modals
+@*@model DF.ACE.Web.Models.Users.UserListViewModel
+@model DF.ACE.Web.Models.Profile.EditAdditionalUserProfileModel*@
+@model DF.ACE.Web.Models.Profile.EntireUserModel
+@{
+    ViewBag.CurrentPageName = PageNames.Users; // The menu item will be active for this page.
+}
+@section scripts
+    {
+    <environment names="Development">
+        <script src="~/view-resources/Views/Users/Index.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/Users/Index.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    @L("Users")
+                </h3>
+            </div>
+        </div>
+        <div class="m-portlet__head-tools">
+            <ul class="m-portlet__nav">
+                <li class="m-portlet__nav-item">
+                    <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover" aria-expanded="true">
+                        <a href="javascript:void(0);" class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
+                            <i class="la la-ellipsis-h m--font-brand"></i>
+                        </a>
+                        <div class="m-dropdown__wrapper">
+                            <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                            <div class="m-dropdown__inner">
+                                <div class="m-dropdown__body">
+                                    <div class="m-dropdown__content">
+                                        <ul class="m-nav">
+                                            <li class="m-nav__section m-nav__section--first">
+                                                <span class="m-nav__section-text">Actions</span>
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a id="RefreshButton" href="javascript:void(0);" class="m-nav__link">
+                                                    <i class="m-nav__link-icon flaticon-refresh"></i>
+                                                    <span class="m-nav__link-text">@L("Refresh")</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="m-portlet__body">
+        <!--begin: Datatable -->
+        <div class="m_datatable m-datatable m-datatable--default m-datatable--loaded m-datatable--scroll" id="local_record_selection">
+            <table class="m-datatable__table" style=" display: block; min-height: 300px; max-height: 550px;">
+                <thead class="m-datatable__head">
+                    <tr class="m-datatable__row" style="left: 0px;">
+                        <th data-field="@L("UserName")" class="m-datatable__cell " style="width: 120px;">
+                            <span>@L("UserName")</span>
+                        </th>
+                        <th data-field="@L("FullName")" class="m-datatable__cell" style="width: 200px;">
+                            <span>@L("FullName")</span>
+                        </th>
+                        <th data-field="@L("EmailAddress")" class="m-datatable__cell" style="width: 300px;">
+                            <span>@L("EmailAddress")</span>
+                        </th>
+                        <th data-field="@L("IsActive")" class="m-datatable__cell " style="width: 120px;">
+                            <span>@L("IsActive")</span>
+                        </th>
+                        <th data-field="Actions" class="m-datatable__cell " style="width: 150px;">
+                            <span>Actions</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="m-datatable__body ps ps--active-x ps--active-y" style="max-height: 499px;">
+                    @{ var i = 0; }
+                    @foreach (var user in Model.UserListViewModel.Users)
+                    {
+                        i++;
+                        var m = i % 2;
+                        <tr class="m-datatable__row @(m.Equals(0) ? "m-datatable__row--even" : " ") ;" style="left: 0px;">
+                            <td data-field="@L("UserName")" class="m-datatable__cell" style="width: 120px;">
+                                <span>@user.UserName</span>
+                            </td>
+                            <td data-field="@L("FullName")" class="m-datatable__cell" style="width: 200px;">
+                                <span>@user.FullName</span>
+                            </td>
+                            <td data-field="@L("EmailAddress")" class="m-datatable__cell" style="width: 300px;">
+                                <span>@user.EmailAddress</span>
+                            </td>
+                            <td data-field="Status" class="m-datatable__cell" style="width: 120px;">
+                                <span><span class="m-badge m-badge--wide  @(user.IsActive ? "m-badge--success" : "m-badge--danger") ;">@(user.IsActive ? "Active" : "Inactive")</span></span>
+                            </td>
+                            <td data-field="Actions" class="m-datatable__cell" style="width: 150px;">
+                                <span>
+                                    <a href="#" class="m-btn--pill edit-user m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only" title="Edit" data-user-id="@user.Id" data-toggle="modal" data-target="#UserEditModal">
+                                        <i class="la la-edit"></i>
+                                    </a>
+                                    <a href="#" class="m-btn--pill delete-user m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only" title="Delete" data-user-id="@user.Id" data-user-name="@user.UserName">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+            <div class=" order-1 order-xl-2 m--align-right">
+                <button class="btn btn-info m-btn m-btn--custom m-btn--air" data-toggle="modal" data-target="#UserCreateModal">
+                    <span style="vertical-align: middle">
+                        <i class="la la-plus"></i>
+                        <span>Add</span>
+                    </span>
+                </button>
+                <div class="m-separator m-separator--dashed d-xl-none"></div>
+            </div>
+        </div>
+        <!--end: Datatable -->
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="UserCreateModal" tabindex="-1" role="dialog" aria-labelledby="UserCreateModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--tabs">
+                    @Html.Partial("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("AddUser")))
+
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-tools">
+                            <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right" role="tablist">
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link active" href="#create-user-details" data-toggle="tab" role="tab">
+                                        @L("UserDetails")
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" href="#create-user-roles" data-toggle="tab" role="tab">
+                                        @L("UserRoles")
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" href="#additional-user-details" data-toggle="tab" role="tab">
+                                        @L("AdditionalInformation")
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!--begin::Form-->
+                    <form name="userCreateForm" role="form" novalidate class="form-validation m-form m-form--fit m-form--label-align-right">
+                        <div class="m-portlet__body">
+                            <div class="tab-content">
+
+                                <div role="tabpanel" class="tab-pane animated fadeIn active" id="create-user-details">
+                                    <div class="form-group m-form__group">
+                                        <label for="UserName">@L("UserName")</label>
+                                        <input type="text" class="form-control m-input" name="UserName" id="UserName" aria-describedby="User Name" placeholder="Enter User Name" required maxlength="@AbpUserBase.MaxUserNameLength" minlength="2">
+                                    </div>
+
+                                    <div class="form-group m-form__group row">
+                                        <div class="col-lg-6">
+                                            <label>@L("Name")</label>
+                                            <input type="text" name="Name" class="form-control m-input" placeholder="Enter Name" required maxlength="@AbpUserBase.MaxNameLength">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>@L("Surname")</label>
+                                            <input type="text" name="Surname" class="form-control m-input" placeholder="Enter Last number" required maxlength="@AbpUserBase.MaxSurnameLength">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group m-form__group">
+                                        <label>@L("EmailAddress")</label>
+                                        <input type="email" class="form-control m-input" name="EmailAddress" id="EmailAddress" placeholder="Enter Email" required maxlength="@AbpUserBase.MaxEmailAddressLength">
+                                    </div>
+
+                                    <div class="form-group m-form__group">
+                                        <label>@L("Password")</label>
+                                        <input type="password" class="form-control m-input" name="Password" id="Password" placeholder="Enter Password" required maxlength="@AbpUserBase.MaxPlainPasswordLength">
+                                    </div>
+
+
+                                    <div class="form-group m-form__group">
+                                        <label>@L("ConfirmPassword")</label>
+                                        <input type="password" class="form-control m-input" name="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm Password" required maxlength="@AbpUserBase.MaxPlainPasswordLength">
+                                    </div>
+
+                                    <div class="form-group m-form__group">
+                                        <label class="m-checkbox m-checkbox--solid m-checkbox--success">
+                                            <input type="checkbox" name="IsActive" value="true" id="CreateUserIsActive" class="filled-in" checked>
+                                            @L("IsActive")
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div role="tabpanel" class="tab-pane animated fadeIn" id="create-user-roles">
+                                    <div class="row">
+                                        <div class="form-group m-form__group row">
+                                            @foreach (var role in Model.UserListViewModel.Roles)
+                                            {
+                                                <div class="col-lg-6">
+                                                    <label for="role-@role.Id" title="@role.DisplayName" class="m-checkbox m-checkbox--solid m-checkbox--success">
+                                                        <input type="checkbox" name="role" value="@role.NormalizedName" title="@role.Description" id="role-@role.Id" class="filled-in">
+                                                        @role.Name
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div role="tabpanel" class="tab-pane animated fadeIn" id="additional-user-details">
+
+                                    <div class="form-group m-form__group row">
+                                        <label for="Line1" class="col-2 col-form-label">Line 1</label>
+                                        <div class="col-7">
+                                            <input name="Line1" id="line1" class="form-control m-input" type="text"  placeholder="Enter Line1" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group m-form__group row">
+                                        <label for="Line2" class="col-2 col-form-label">Line 2</label>
+                                        <div class="col-7">
+                                            <input name="Line2" id="line2" class="form-control m-input" type="text"  placeholder="Enter Line2" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group m-form__group row">
+                                        <label for="City" class="col-2 col-form-label">City</label>
+                                        <div class="col-7">
+                                            <input name="City" id="city" class="form-control m-input" type="text"   placeholder="Enter City"/> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="State" class="col-2 col-form-label">State</label>
+                                        <div class="col-7">
+                                            <input name="State" id="state" class="form-control m-input" type="text"   placeholder="Enter State"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">Country</label>
+                                        <div class="col-7">
+                                            <input name="Country" id="country" class="form-control m-input" type="text"   placeholder="Enter Country"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">Postcode</label>
+                                        <div class="col-7">
+                                            <input name="ZipCode" id="zipcode" class="form-control m-input" type="text"  placeholder="Enter Postcode"/> 
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        @Html.Partial("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="UserEditModal" tabindex="-1" role="dialog" aria-labelledby="UserEditModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>

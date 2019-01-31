@@ -1,0 +1,39 @@
+﻿@using DF.ACE.Web.Views.Shared.Components.TopBarLanguageSwitch
+@model TopBarLanguageSwitchViewModel
+
+<a href="javascript:void(0);" class="m-nav__link m-dropdown__toggle" role="button">
+    <span class="m-nav__link-text">
+        <i class="@Model.CurrentLanguage.Icon" title="@Model.CurrentLanguage.DisplayName"></i>
+        @Model.CurrentLanguage.DisplayName
+    </span>
+</a>
+<div class="m-dropdown__wrapper">
+    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+    <div class="m-dropdown__inner">
+        <div class="m-dropdown__header m--align-center" style="background: url(assets/app/media/img/misc/quick_actions_bg.jpg); background-size: cover;">
+            <span class="m-dropdown__header-subtitle">Select your language</span>
+        </div>
+        <div class="m-dropdown__body">
+            <div class="m-dropdown__content">
+                <ul class="m-nav m-nav--skin-light">
+                    @foreach (var language in Model.Languages)
+                    {
+                        if (language.Name != Model.CurrentLanguage.Name)
+                        {
+                            <li class="m-nav__item">
+                                <a class="m-nav__link" href="@(ApplicationPath)AbpLocalization/ChangeCulture?cultureName=@(language.Name)&returnUrl=@(Context.Request.Path)">
+                                    <span class="m-nav__link-icon">
+                                        <i class="@language.Icon"></i>
+                                    </span>
+                                    <span class="m-nav__link-title m-topbar__language-text m-nav__link-text">
+                                        @language.DisplayName
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

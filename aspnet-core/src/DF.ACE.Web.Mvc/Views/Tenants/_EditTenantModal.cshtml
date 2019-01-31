@@ -1,0 +1,40 @@
+﻿@using Abp.MultiTenancy
+@using DF.ACE.MultiTenancy.Dto
+@using DF.ACE.Web.Models.Common.Modals
+@model TenantDto
+@{
+    Layout = null;
+}
+
+<div class="modal-body">
+    <div class="m-portlet m-portlet--tab">
+        @Html.Partial("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditTenant")))
+        <!--begin::Form-->
+        <form name="TenantEditForm" role="form" novalidate class="form-validation m-form m-form--fit m-form--label-align-right">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group">
+                    <label for="TenancyName">@L("TenancyName")</label>
+                    <input type="text" class="form-control m-input" name="TenancyName" id="TenancyName" value="@Model.TenancyName" required maxlength="64" minlength="2">
+                </div>
+                <div class="form-group m-form__group">
+                    <label for="Name">@L("Name")</label>
+                    <input type="text" class="form-control m-input" name="Name" id="Name" value="@Model.Name" required maxlength="128">
+                </div>
+                <div class="form-group m-form__group">
+                    <label class="m-checkbox m-checkbox--solid m-checkbox--success">
+                        <input type="checkbox" name="IsActive" value="true" id="isactive" class="filled-in" @(Model.IsActive ? "checked" : "")>
+                        @L("IsActive")
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+            @Html.Partial("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+        </form>
+
+        <!--end::Form-->
+    </div>
+</div>
+
+
+<script src="~/view-resources/Views/Tenants/_EditTenantModal.js" asp-append-version="true"></script>

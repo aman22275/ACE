@@ -1,0 +1,56 @@
+﻿@using DF.ACE.Web.Models.Common.Modals
+@model DF.ACE.Web.Models.Roles.EditRoleModalViewModel
+@{
+    Layout = null;
+}
+
+<div class="modal-body">
+    <div class="m-portlet m-portlet--tab">
+        @Html.Partial("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditRole")))
+        <!--begin::Form-->
+        <form name="RoleEditForm" role="form" novalidate class="form-validation m-form m-form--fit m-form--label-align-right">
+            <input type="hidden" name="Id" value="@Model.Role.Id" />
+            <input type="hidden" name="IsStatic" value="@(Model.Role.IsStatic.ToString())" />
+
+            <div class="m-portlet__body">
+
+                <div class="form-group m-form__group">
+                    <label for="rolename">@L("RoleName")</label>
+                    <input type="text" @(Model.Role.IsStatic ? "disabled" : "") class="validate form-control m-input" name="Name" id="rolename" value="@Model.Role.Name" required maxlength="32" minlength="2">
+                </div>
+
+                <div class="form-group m-form__group">
+                    <label for="DisplayName">@L("DisplayName")</label>
+                    <input type="text" class="validate form-control m-input" name="DisplayName" id="displayname" value="@Model.Role.DisplayName" required maxlength="32" minlength="2">
+                </div>
+
+                <div class="form-group m-form__group">
+                    <label for="role-description">@L("RoleDescription")</label>
+                    <textarea id="role-description" class="form-control m-input validate form-control" name="Description">@Model.Role.Description</textarea>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <h4>@L("Permissions")</h4>
+                </div>
+                <div class="form-group m-form__group row">
+
+                    @foreach (var permission in Model.Permissions)
+                    {
+                        <div class="col-lg-6">
+                            <label for="@string.Format("permission{0}",permission.Name)" class="m-checkbox m-checkbox--solid m-checkbox--success">
+                                <input type="checkbox" name="permission" value="@permission.Name" class="filled-in" id="@string.Format("permission{0}",permission.Name)" @(Model.HasPermission(permission) ? "checked" : "") @(Model.Role.IsStatic ? "disabled" : "") />
+                                @permission.DisplayName
+                                <span></span>
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+
+            </div>
+            @Html.Partial("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+        </form>
+    </div>
+    </div>
+    <script src="~/view-resources/Views/Roles/_EditRoleModal.js" asp-append-version="true"></script>
